@@ -1,73 +1,59 @@
-# React + TypeScript + Vite
+# React e seus Fundamentos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Strict Mode
 
-Currently, two official plugins are available:
+O Strict Mode é uma ferramenta do React que ajuda a identificar problemas no código.
+Ele é um "enfeite" que não afeta o código em produção, mas ajuda a identificar problemas no código em desenvolvimento.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## CSS Modules e escopo
 
-## React Compiler
+Existem dpis tipos de escopo ao utilizar CSS em aplicações React a global e a modular. O CSS global é o comum, aquele que podem ser criadas variáveis e estas podem ser acessadas por toda aplicação. O CSS modular é aquele que as variáveis são criadas e estas só podem ser acessadas pelo arquivo onde foram criadas. Para utilizar CSS modular é preciso que o arquivo tenha a extensão `.module.css`. Dentro do arquivo ele é utilizado da seguinte forma:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```JSX
+import styles from "./styles.module.css";
 
-## Expanding the ESLint configuration
+const App = () => {
+  return (
+    <div>
+      <h1 className={styles.title}>Hello World</h1>
+    </div>
+  )
+};
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+export default App;
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Propriedades de Componentes (props) e children
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Todo componente quando é criado recebe um objeto vazio como argumento. Esse objeto vem vazio por padrão, mas, para popular ele, basta enviar valores para ele através de atributos dentro da tag do componente ou envolvendo um valor que você queira passar entre as tags deste componente. Esta última maneira de passar props se chama children. Então, seguindo o exemplo, pode ser visto os dois tipos de props que podem ser passados para um componente.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```TSX
+// Componente utilizando os props
+import styles from "./styles.module.css";
+
+const Component = (props: { title: string, children: React.ReactNode }) => {
+  return (
+    <div>
+      <div className={styles.title}>
+        <h1>
+          {props.title}
+        </h1>
+        {props.children}
+      </div>
+    </div>
+  )
+};
+
+
+// Passando os props para o componente 
+
+const OutroComponent = () => {
+  return (
+    <div>
+    <Component title="Título">
+      <p>Parágrafo</p>
+    </Component>
+    </div>
+  )
+};
 ```
