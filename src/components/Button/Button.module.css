@@ -1,12 +1,27 @@
 .button {
-  background-color: var(--primary);
   border: none;
   border-radius: 10px;
   padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.button:hover {
-  background-color: var(--primary-dark);
+.green {
+  background-color: var(--success);
+}
+
+.red {
+  background-color: var(--error);
+}
+
+.red:hover {
+  background-color: var(--error-dark);
+}
+
+.green:hover {
+  background-color: var(--success-dark);
 }

@@ -12,16 +12,20 @@ const Config = () => {
         </p>
       </div>
 
-      <div className={styles.inputContainer}>
-        <p>Foco (min)</p>
-        <Input />
-
-        <p>Pausa curta (min)</p>
-        <Input />
-
-        <p>Pausa longa (min)</p>
-        <Input />
-      </div>
+      <form className={styles.inputContainer}>
+        <div className={styles.inputGroup}>
+          <label htmlFor="focus">Foco (min)</label>
+          <Input placeholder="25" type="number"/>
+        </div>
+        <div className={styles.inputGroup}>
+          <label htmlFor="shortBreak">Pausa curta (min)</label>
+          <Input placeholder="5" type="number" id="shortBreak"/>
+        </div>
+        <div className={styles.inputGroup}>
+          <label htmlFor="longBreak">Pausa longa (min)</label>
+          <Input placeholder="15" type="number" id="longBreak"/>
+        </div>
+      </form>
     </>
   );
 };

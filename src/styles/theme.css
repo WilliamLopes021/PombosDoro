@@ -17,8 +17,10 @@
   --link-hover: #0b8a60;
 
   --success: #22c55e;
+  --success-dark: #105f2e;
   --warning: #eab308;
-  --error: #991b1b;
+  --error: #b62121;
+  --error-dark: #811818;
   --info: #0ea5e9;
 
   --text-over-primary: #0a0f1a;

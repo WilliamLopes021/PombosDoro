@@ -56,4 +56,40 @@ const OutroComponent = () => {
     </div>
   )
 };
+
+```
+
+## Gerenciamento de Estados
+
+A inserção e manipulação de dados dinâmicos em componentes TSX/JSX devem ser feitos através de estados. Um estado é uma variável que pode ser alterada e que, quando alterada, faz com que o componente seja renderizado novamente. O uso desse hook, assim que são chamados as funções de gerenciamento do `React`, fornece dois elementos: a variável que guarda o valor e uma função que possui a funcionalidade de alterar o valor desta variável:
+
+``` TSX
+
+//     valor     funcao         hook     tipagem  valor inicial
+const [variavel, setVariavel] = useState<string>('valorInicial');
+
+setVariavel('novoValor');
+```
+
+Existem algumas especificações ao utilizar este hook, como, por exemplo, ao atualizar o valor da variável e esta atualização depender do valor anterior, deve-se passar dentro da função de alteração de estado um callback que recebe o valor anterior como argumento:
+
+```TSX
+
+const [contador, setContador] = useState<number>(0);
+
+setContador((valorAnterior) => valorAnterior + 1);
+```
+
+Outra especificação é em relação ao valor inicial do estado. Se ele precisar passar por um processo, pode-se utilizar uma função que retorna o valor inicial, dessa maneira ele vai rodar somente uma vez e quando o componente for renderizado novamente, ele não vai rodar o processo novamente. Exemplo:
+
+```TSX
+
+const [contador, setContador] = useState<number>(() => {
+  let valor = 0;
+  for (let i = 0; i < 10; i++) {
+    valor += i;
+  }
+  return valor;
+});
+
 ```

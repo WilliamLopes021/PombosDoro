@@ -5,11 +5,36 @@
   align-items: center;
   justify-content: center;
   gap: 1.4rem;
+  transition: color 0.3s ease;
 }
 
-.buttonContainer {
+.heading:hover {
+  cursor: pointer;
+  color: var(--primary-dark);
+}
+
+.navContainer {
   display: flex;
   gap: 1.5rem;
   margin-top: 2.4rem;
+}
+
+.navItem {
+  display: flex;
+  border: none;
+  background-color: var(--primary);
+  color: var(--text-over-primary);
+  border-radius: 10px;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.navItem:hover {
+  background-color: var(--primary-dark);
 }
 

@@ -1,29 +1,28 @@
 import styles from "./Heading.module.css";
-import Button from "../../components/Button/Button";
 import { Bird, Clock10, Home, Settings, Sun } from "lucide-react";
 
 const Heading = () => {
   return (
     <div>
       <div className={styles.heading}>
-        <Bird size={100} color="var(--primary)" />
+        <Bird size={100} />
         <h1>PombosDoro</h1>
       </div>
 
-      <span className={styles.buttonContainer}>
-        <Button>
+      <nav className={styles.navContainer}>
+        <a aria-label="Home" className={styles.navItem}>
           <Home />
-        </Button>
-        <Button>
+        </a>
+        <a aria-label="Histórico" className={styles.navItem}>
           <Clock10 />
-        </Button>
-        <Button>
+        </a>
+        <a aria-label="Configurações" className={styles.navItem}>
           <Settings />
-        </Button>
-        <Button>
+        </a>
+        <a aria-label="Tema" className={styles.navItem}>
           <Sun />
-        </Button>
-      </span>
+        </a>
+      </nav>
     </div>
   );
 };
