@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./Heading.module.css";
-import { Bird, Clock10, Home, Settings, Sun } from "lucide-react";
+import { Bird, Clock10, Home, Settings, Sun, Moon } from "lucide-react";
 
 type Theme = "light" | "dark";
 
 const Heading = () => {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>(() => {
+    // Utilizando a Lazy Initialization para carregar o tema
+    const storageTheme = localStorage.getItem("theme") as Theme;
+
+    return storageTheme ?? "dark";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -13,6 +23,11 @@ const Heading = () => {
       return prev === "dark" ? "light" : "dark";
     });
   };
+
+  const nextThemeIcon = {
+    dark: <Sun />,
+    light: <Moon />,
+  }
 
   return (
     <div>
@@ -48,7 +63,7 @@ const Heading = () => {
           className={styles.navItem}
           onClick={handleClick}
         >
-          <Sun />
+          {nextThemeIcon[theme]}
         </a>
       </nav>
     </div>
