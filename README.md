@@ -93,3 +93,7 @@ const [contador, setContador] = useState<number>(() => {
 });
 
 ```
+
+## Efeitos Colaterais e useEffect (effect de efeito colateral!)
+
+Tudo aquilo que o React não sabe, aquilo que é executado fora do ciclo de vida do componente, é chamado de efeito colateral. Ciclo de vida de componente é o período em que o componente é criado, renderizado e destruído, então, em outras palavra, se algo for feito fora do escopo do React, é um efeito colateral. Alguns exemplos de efeitos colaterais são: manipulação do DOM com JavaScript puro, inserção de dados em um banco de dados, inserção de dados em um arquivo, etc. Para que um efeito colateral seja executado, é preciso que ele seja chamado dentro de um hook chamado `useEffect`. O `useEffect` é um hook específico para lidar com efeitos colaterais.
