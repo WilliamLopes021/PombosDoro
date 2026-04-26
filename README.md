@@ -118,7 +118,7 @@ export default TaskContext;
 
 E para acessar o valor deste contexto:
 
-```tsx
+```TSX
 const Timer = () => {
   const taskContextValue = useContext(TaskContext);
   console.log(taskContextValue);
@@ -215,5 +215,187 @@ O React entende uma cleanup function aquela que é retornada dentro do useEffect
       console.log("Cleanup");
     };
   }, [theme]);
+
+```
+
+## Lidando com formulários, eventos e inputs
+
+Cada ação do usuário na página é entendida pelo navegador como um evento. Então, eventos vão desde um click num botão até um envio de formulário. O tratamento de eventos no react é parecido com o javascript puro, mas possui suas peculiaridades. Para capturar o valor de um input de um formulário, deve-se levar em consideração os conceitos de renderização e efeitos colaterais, pois o react deve "saber"/"assistir" o que está sendo feito. Desta maneira, tem-se algumas maneiras de capturar um dado vindo de um formulário:
+
+- Utilizando estados:
+  - A cada mudança no campo do formulário, o estado é atualizado e o componente é renderizado novamente.
+  - Este caso é bom para saber o que está sendo inserido em tempo real, como em validação de senhas.
+
+```TSX
+  const handleCreateTask = (event: React.SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(taskName);
+  };
+
+  return (
+      <form onSubmit={handleCreateTask}>
+        <label htmlFor="task">task:</label>
+        <input
+          type="text"
+          value={taskName}
+          onChange={(e) => setTaskName(e.target.value)}
+        />
+      </form>
+  );
+```
+
+- Utilizando useRef:
+  - Ao contrário do estado, o useRef não causa uma re-renderização do componente.
+  - Ele é mais utilizado quando não é necessário saber o que está sendo inserido em tempo real, como em formulários que serão enviados de uma vez.
+  - Para acessar o valor do input, deve-se acessar a propriedade `.current` do objeto retornado pelo hook `useRef`.
+
+```TSX
+  const input = useRef<HTMLInputElement>(null);
+  // Note que o input não está recebendo o valor de um estado, mas sim o valor do ref.
+  // Quando o form for enviado ref será preenchido com o valor do input e poderá ser acessado com input.current.value
+  // Note que o atributo current se refere ao elemento HTML e não ao valor do input.
+  return (
+      <form onSubmit={handleCreateTask}>
+        <label htmlFor="task">task:</label>
+        <input
+          type="text"
+          ref={input}
+          onChange={(e) => setTaskName(e.target.value)}
+        />
+      </form>
+
+```
+
+---
+
+## reducer e useReducer
+
+Com o reducer é possível anexar um estado inicial ao hook e permite disparar ações como segundo parâmetro para alterar este estado. Um exemplo simples seria a manipulação de número:
+
+### Utilização
+
+- O useReducer retorna uma array, sendo o primeiro elemento o estado e o segundo uma função nomeada dispatch;
+  - dispatch porque ela vai ser a responsável por delegar qual a açõ será feita, sendo essa ação responsável por mutar o estado
+- O primeiro argumento passado é uma callback function com um parâmetro referenciando o estado e o segundo referenciando a ação;
+- O segundo argumento a ser passado é o estado inicial da variável;
+
+```TSX
+
+const [number, dispatch] = useReducer((state, action) => {
+  // SEMPRE deve retornar o estado
+  return state;
+}, 0)
+
+```
+
+Um padrão muito utilizado com reducer é implementar um swtich case com todas as ações que podem existir, desta maneira:
+
+```TSX
+
+const [number, dispatch] = useReducer((state, action) => {
+  switch (action) {
+    case "açãoDeIncremento":
+      return state + 1;
+    case "açãoDeDecremento":
+      return state - 1;
+    case "qualquerOutraCoisa":
+      return (state = 0);
+  }
+  // SEMPRE deve retornar o estado
+  return state;
+}, 0);
+
+
+// Utilização:
+
+<button
+  onClick={() => dispatch("açãoDeDecremento")}
+>
+  incrementar
+</button>
+
+```
+
+### Tornando mais complexo
+
+Tratando de objetos com useReducer:
+
+```TSX
+
+type actionType = {
+  type: string;
+  payload?: number;
+};
+
+const [number, dispatch] = useReducer(
+  (state, action: actionType) => {
+    switch (action.type) {
+      case "incrementaMais10":
+        // Sempre deve retornar state!
+        if (!action.payload) return state;
+        return {
+          ...state,
+          secondsRemaining: state.secondsRemaining + action.payload,
+        };
+    }
+    // SEMPRE deve retornar o estado
+    return state;
+  },
+  {
+    secondsRemaining: 0,
+  },
+);
+
+return (
+  <TaskContext.Provider value={{ state, setState }}>
+      <h1>Número: {JSON.stringify(number)} </h1>
+    <button
+      onClick={() => {
+        dispatch({ type: "incrementaMais10", payload: 10 });
+      }}
+    >
+      incrementar
+    </button>
+  </TaskContext.Provider>
+);
+
+```
+
+## Web Workers
+
+Web workers funcionam de maneira assíncrona em conjunto com o navegador, ou seja, fazem uma atividade ao mesmo tempo que o navegador faz outra atividade. Eles servem para realizar processos em segundo plano, nesta aplicação utilizaremos para gerenciar o timer.
+
+### Funcionamento/Sintaxe
+
+Ele é simples de ser utilizado, basta pensar que um manda uma mensagem, pode ser o worker ou o destinatário, e, quando essa mensagem é recebida, eles podem disparar algo em troca.
+
+``` TSX
+// timerWorker.js
+
+self.onmessage = function (event) {
+  console.log('worker recebeu:', event.data);
+
+  // envia uma mensagem
+  self.postMessage('mensagem enviada pelo worker!');
+
+};
+
+```
+
+``` TSX
+// TimerComponent.tsx
+
+  const handleCreateTask = (event: React.SubmitEvent<HTMLFormElement>) => {
+    const worker = new Worker(
+      new URL("../../workers/timerWorker.js", import.meta.url),
+    );
+
+    worker.postMessage("mensagem enviada pelo componente.");
+
+    // disparo de função ao receber mensagem de worker
+    worker.onmessage = function (event) {
+      console.log("principal recebeu", event.data);
+    };
+  };
 
 ```

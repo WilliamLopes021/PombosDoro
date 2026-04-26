@@ -1,23 +1,8 @@
-import { createContext } from "react";
-import type { TaskContextProps } from "../../props/contexts/TaskContextProps";
-import type { TaskStateModel } from "../../types/Task/TaskStateModel";
+import TaskContext from "./TaskContext";
+import { useContext } from "react";
 
-const initialState: TaskStateModel = {
-  task: [],
-  formattedSecondsRemaining: "00:00",
-  secondsRemaining: 0,
-  activeTask: null,
-  currentCycle: 0,
-  config: {
-    workTime: 25,
-    shortBreakTime: 5,
-    longBreakTime: 15,
-  },
+const useTaskContext = () => {
+  return useContext(TaskContext);
 };
 
-const TaskContext = createContext<TaskContextProps>({
-  state: initialState,
-  setState: () => {},
-});
-
-export default TaskContext;
+export default useTaskContext;
