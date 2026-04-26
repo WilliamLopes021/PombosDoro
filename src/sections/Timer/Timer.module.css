@@ -4,7 +4,7 @@
 }
 
 .taskContainer {
-  font-size: clamp(1rem, 2vw, 2rem);
+  font-size: clamp(1.5rem, 2vw, 2rem);
   display: flex;
   flex-direction: column;
   align-items: center;
